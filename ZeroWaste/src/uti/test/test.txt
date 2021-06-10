@@ -1,0 +1,49 @@
+Question: You’ve just noticed a button is loose on your best shirt. You need to wear it in a few days, what do you do?
+2 I'll buy a second hand shirt from an opportunity shop to replace it. It's cheap and supports a charity.
+3 Sew it myself or get it repaired. It's not that much effort to take it to the local clothing alteration shop. 
+1 I'll just buy a brand new one. I don't mind spending the extra money. 
+
+Question: You're getting ready to go on a day trip with your friend. You've packed food and sun screen, but will you bring a water bottle too?
+2 I have one, so if I remember to fill it up and pack it, then I'll take it with me.
+1 No. A water bottle wouldn't fit in my bag, and why would I need one when I can just buy a bottle from a cafe.
+3 Yes, definitely! It's handy to have some H2O on me wherever I go.
+
+Question: How often do you recycle?
+1 I hardly ever do unless I see a recycle bin. 
+3 Any chance I get, whether at home or when I'm out. 
+2 As often as I can - sometimes I'm not able to or forget. 
+
+Question: You're on your way home and remember you need to pick up something from the supermarket. You're at the register to pay and realise you forgot to bring a bag. What do you do?
+3 I'll just carry my items. There's not that many, and I'm going straight home anyway.
+1 Ask for a plastic bag. One plastic bag won't do that much damage, right?
+2 Buy a green bag! It's better for the environment, and hopefully I'll remember to bring it with me next time I go shopping.
+
+Question: You're at your favourite cafe, and they bring your iced latte out with a paper straw in it, instead of their normal plastic straws. What do you do?
+1 Ask them if I could have a plastic straw instead. I really don't like how soggy paper straws go, so I'd much rather be drinking from something that doesn't disintegrate in my drinks.
+2 Happily accept the paper straw. It's about time more places started using them instead of plastic straws. 
+3 Kindly tell the waiter that next time you don't need a straw - I actually have my own reusable one! 
+
+Question: Do you turn off the lights whenever you leave a room?
+3 Yes, I make it a point.
+2 I strive to but sometimes I forget.
+1 No, I'm afraid of the dark.
+
+Question:You're tidying up the house and decide to load the dishwasher. Once you've packed it, you notice it's only half full. What do you do next?
+1 Run the half-load anyway. I'd prefer to just get it done now so I can go do something else.
+3 Leave it. I'll wait until there's more dishes to fill it up completely, and then run a full load.
+2 Run the half-load, but on a quick wash setting. It won't waste as much water, right?
+
+Question: What do you do with clothes that you don't want anymore?
+1 Throw them away.
+3 Donate/give them away.
+2 Sell them.
+
+Question: You're going to meet your friends at a cafe nearby. It'll take you 10 minutes to drive there, you could take the train, or it's a 30 minute walk. How do you decide to travel there?
+3 I'll walk. It's great exercise, and it gives me a chance to listen to my favourite music to get hyped up before I see my friends!
+2 I'll take the train... but I'll drive to the station. I don't like walking for ages.
+1 I'll just drive. It's such a short trip, how much could the fuel consumption actually be?
+
+Question: When having a family BBQ, what do you eat off of?
+1 Styrofoam plates and cups.
+3 Dishes from inside the house that I will wash later.
+2 Biodegradable plates, cups, eating utensils, and napkins.

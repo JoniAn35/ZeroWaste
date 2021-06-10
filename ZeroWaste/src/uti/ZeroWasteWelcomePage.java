@@ -1,59 +1,92 @@
 package uti;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
-public class ZeroWasteWelcomePage extends JFrame implements ActionListener{
-	JButton start = new JButton("Start");
+public class ZeroWasteWelcomePage extends JPanel implements ActionListener{
+	JFrame frame;
+	
+	JPanel mainPanel;
+	JPanel topPanel;
+	JPanel textPanel;
+	JPanel buttonPanel;
+	JPanel bottomPanel;
+	
+	JLabel titleLabel;
+	JLabel infoLabel;
+	JLabel imageLabel;
+	
+	JButton start;
 
-	public ZeroWasteWelcomePage() {
-		// setLayout(new BorderLayout());
+	public ZeroWasteWelcomePage(JFrame frame) throws IOException {
+		this.frame = frame;
+		this.frame.setSize(850, 400);
+		this.frame.setLocationRelativeTo(null);
+		this.frame.setResizable(false);
 		
-		JPanel panel = new JPanel();
-//		panel.setAlignmentY(CENTER_ALIGNMENT);
-//		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		this.setSize(850, 400);
-		this.setLocationRelativeTo(null);
-		this.setResizable(false);
-		this.add(panel, BorderLayout.CENTER);
-
-		JLabel title = new JLabel("ZERO WASTE");
-		title.setFont(new Font("Verdana", Font.ITALIC + Font.BOLD, 40));
-		title.setForeground(new Color(0, 153, 0));
-		panel.add(title);
-
-		String text = "<html><div style='text-align: center;'><p>Our mission is to make people more aware of their surrounding."
+		mainPanel = new JPanel();
+		mainPanel.setLayout(new GridLayout(2, 1));
+		this.add(mainPanel);
+		
+		topPanel = new JPanel();
+		topPanel.setLayout(new GridLayout(2, 1));
+		mainPanel.add(topPanel);
+		
+		textPanel = new JPanel();
+		textPanel.setLayout(new GridLayout(2, 1));
+		topPanel.add(textPanel);
+		
+		titleLabel = new JLabel("ZERO WASTE", SwingConstants.CENTER);
+		titleLabel.setFont(new Font("Verdana", Font.ITALIC + Font.BOLD, 40));
+		titleLabel.setForeground(new Color(0, 153, 0));
+		textPanel.add(titleLabel);
+		
+		String textHtml = "<html><div style='text-align: center;'><p>Our mission is to make people more aware of their surrounding."
 				+ "<br />" + "We aim to show how easy the techiques of zero waste actually are." + "<br />"
 				+ "One could save the environment while fulfilling the tasks given and enjoying themselves</p></div></html>";
-		JLabel info = new JLabel(text);
-		info.setForeground(new Color(34, 139, 34));
-		panel.add(info);
-		
-		start.addActionListener(this);
-		panel.add(start, BorderLayout.CENTER);
+		infoLabel = new JLabel(textHtml, SwingConstants.CENTER);
+		infoLabel.setForeground(new Color(34, 139, 34));
+		textPanel.add(infoLabel);
 
-		JPanel imagePanel = new JPanel();
-		JLabel imageLabel = new JLabel(new ImageIcon("/Users/yoanaangelova/Desktop/java/ZeroWaste/ZeroWaste/src/border.png"));
-		imagePanel.add(imageLabel);
-		imagePanel.setAlignmentY(BOTTOM_ALIGNMENT);
-		panel.add(imagePanel);
+		buttonPanel = new JPanel();
+		buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		topPanel.add(buttonPanel, FlowLayout.CENTER);
+		
+		start = new JButton("Start");
+		start.addActionListener(this);
+		buttonPanel.add(start);
+		
+		bottomPanel = new JPanel();
+		bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		mainPanel.add(bottomPanel);
+		
+		imageLabel = new JLabel(new ImageIcon("/Users/yoanaangelova/Desktop/java/ZeroWaste/ZeroWaste/src/border.png"));
+		bottomPanel.add(imageLabel);
 		
 		this.setVisible(true);
+		this.frame.add(this);
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
 		this.setVisible(false);
-		TestPanel test = new TestPanel();
+		try {
+			TestPanel test = new TestPanel(this.frame);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
