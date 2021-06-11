@@ -34,7 +34,7 @@ public class ZeroWasteWelcomePage extends JPanel implements ActionListener{
 		this.frame = frame;
 		this.frame.setSize(850, 400);
 		this.frame.setLocationRelativeTo(null);
-		this.frame.setResizable(false);
+//		this.frame.setResizable(false);
 		
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new GridLayout(2, 1));

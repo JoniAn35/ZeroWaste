@@ -1,6 +1,6 @@
 package uti;
 
-public  class User {
+public abstract class User {
 	int testResult;
 	int buttonCount;
 	String userName;
@@ -8,5 +8,7 @@ public  class User {
 	public User(int result) {
 		testResult = result;
 	}
+	
+	public abstract String print();
 	
 }

@@ -1,5 +1,7 @@
 package uti;
 
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -21,49 +23,60 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.UIManager;
+
+/**
+ * 
+ * @author yoanaangelova
+ * TODO: 
+ * 		Роси: да се оправи изчиснявнето на резултата и  JOptionPane-а (размер, текст и бутон)
+ *
+ */
 
 public class TestPanel extends JPanel implements ActionListener {
 	JFrame frame;
 
 	JPanel testPanel;
-	JScrollBar scrollBar;
+	JScrollPane scrollPane;
 	JButton resultButton;
 	File testFile;
 	Scanner scanner;
 	JLabel[] testLabel;
+	
+	User user;
 
 	Map<String, Integer> answers; // String - key(answer); integer - value(points)
 
 	public TestPanel(JFrame frame) throws IOException {
+		this.user = user;
+		
 		this.frame = frame;
 		this.frame.setSize(850, 400);
 		this.frame.setLocationRelativeTo(null);
-		this.frame.setResizable(false);
 
 		testPanel = new JPanel();// shows the test
 		testPanel.setBorder(BorderFactory.createEmptyBorder());
 		testPanel.setLayout(new BoxLayout(testPanel, BoxLayout.Y_AXIS));
 		this.add(testPanel);
+		
+		JScrollPane scr = new JScrollPane(testPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scr.setPreferredSize(new Dimension(850, 400));
+		add(scr);
 
 		testLabel = new JLabel[10];
-		scrollBar = new JScrollBar();
-		testPanel.add(scrollBar);
 		resultButton = new JButton("Results"); // shows the results after the test is completed
 		resultButton.addActionListener(this);
 		answers = new HashMap<String, Integer>();
 
-//		testFile = new File("/Users/yoanaangelova/Desktop/java/ZeroWaste/ZeroWaste/src/uti/test/test.txt");
 		scanner = new Scanner(TestPanel.class.getResourceAsStream("test/test.txt"));
 		Pattern p = Pattern.compile("Question:");
 
-		// getQuestions(p, scanner.nextLine());// finds the questions in the file
 		getQuestions(p);// finds the questions in the file
 		getAnswers(answers);// finds the answers
 		groupAnswers(answers);// puts the answers in groups of three
 		printTest(Questions, answers);// puts questions in labels
-
-		scrollBar = new JScrollBar();
-		testPanel.add(scrollBar);
+		
 		resultButton = new JButton("Results"); // shows the results after the test is completed
 		resultButton.addActionListener(this);
 
@@ -79,6 +92,7 @@ public class TestPanel extends JPanel implements ActionListener {
 		String line = "";
 		while (scanner.hasNextLine()) {
 			line = scanner.nextLine();
+//			line = String.format("<html><div style=\"width:%dpx;\">%s</div></html>", 850, line);
 			if (line.startsWith("Question:")) {
 				Questions.add(line);
 			}
@@ -86,21 +100,10 @@ public class TestPanel extends JPanel implements ActionListener {
 
 		System.out.println("Questions: " + Questions.size());
 	}
-
-	/*
-	 * public void getQuestions(Pattern patternString, String line) { Matcher
-	 * matcher = patternString.matcher(line); while (scanner.hasNextLine()) { line =
-	 * scanner.nextLine(); if (matcher.matches()) { Questions.add(line); }
-	 * 
-	 * }
-	 * 
-	 * // return Questions; }
-	 */
-
+	
 	String currentLine;
 
 	public Map<String, Integer> getAnswers(Map<String, Integer> answerMap) throws FileNotFoundException {
-//		testFile = new File(TestPanel.class.getResourceAsStream("test/test.txt"));
 		Scanner sc = new Scanner(TestPanel.class.getResourceAsStream("test/test.txt"));
 		while (sc.hasNextLine()) {
 			String nextLine = sc.nextLine();
@@ -108,13 +111,10 @@ public class TestPanel extends JPanel implements ActionListener {
 				continue;
 			}
 			if (nextLine.charAt(0) == '1') {
-//				currentLine = sc.toString();
 				answerMap.put(nextLine.substring(2), 1);
 			} else if (nextLine.charAt(0) == '2') {
-//				currentLine = sc.toString();
 				answerMap.put(nextLine.substring(2), 2);
 			} else if (nextLine.charAt(0) == '3') {
-//				currentLine = sc.toString();
 				answerMap.put(nextLine.substring(2), 3);
 			}
 		}
@@ -149,16 +149,21 @@ public class TestPanel extends JPanel implements ActionListener {
 		return buttonGroups;
 	}
 
-	public void printTest(ArrayList questions, Map<String, Integer> answerMap) {
-		JRadioButton[] radioButtons = new JRadioButton[30];
+	JRadioButton[] radioButtons = new JRadioButton[30];
+	
+	public void printTest(ArrayList<String> questions, Map<String, Integer> answerMap) {
 		ArrayList<String> answersList = new ArrayList<String>(answerMap.keySet());
 		for (int j = 0; j < 30; j++) {
 			radioButtons[j] = new JRadioButton();
-			radioButtons[j].setText(answersList.get(j));
+			String answerText = answersList.get(j);
+			answerText = String.format("<html><div style=\"width:%dpx;\">%s</div></html>", 600, answerText);
+			radioButtons[j].setText(answerText);
 		}
 		for (int i = 1; i <= 10; i++) {
 			testLabel[i - 1] = new JLabel();
-			testLabel[i - 1].setText(questions.get(i - 1).toString());
+			String questionText = questions.get(i - 1);
+			questionText = String.format("<html><div style=\"width:%dpx;\">%s</div></html>", 600, questionText);
+			testLabel[i - 1].setText(questionText.toString());
 			testPanel.add(testLabel[i - 1]);
 			int index = (3 * i) - 1;
 			testPanel.add(radioButtons[index]);
@@ -170,15 +175,31 @@ public class TestPanel extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		Object[] options = { "Yes, please", "No way!" };
-		int n = JOptionPane.showOptionDialog(testPanel, "Would you like green eggs and ham?", "Your results",
-				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, // do not use a custom Icon
-				options, // the titles of buttons
-				options[0]); // default button title
-		if (n == JOptionPane.YES_OPTION) {
+		int result = calculateResult(radioButtons, answers);
+		UIManager.put("OptionPane.DEFAULT_OPTION", "Let's go");
+		int n = JOptionPane.showConfirmDialog(null, 
+                user.print(), "Your result", JOptionPane.DEFAULT_OPTION);
+		if (n == JOptionPane.DEFAULT_OPTION) {
 			this.setVisible(false);
-			MainPanel main = new MainPanel(this.frame);
+			MainPanel main = new MainPanel(this.frame, result, this.user);
 		}
+	}
+	
+	public int calculateResult(JRadioButton[] radioButtons, Map<String, Integer> answerMap) {
+		int result = 0;
+		for (int j = 0; j < 30; j++) {
+			if (radioButtons[j].isSelected()) {
+				String t = radioButtons[j].getText();
+				if(answerMap.containsKey(t)) {
+					result += answerMap.get(t);
+				}
+				else {
+					System.out.println("No");
+				}
+				
+			}
+		}
+		return result;
 	}
 
 }

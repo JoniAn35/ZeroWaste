@@ -9,7 +9,7 @@ public class ZeroWasteApp {
 		JFrame frame = new JFrame();
 		frame.setSize(850, 400);
 		frame.setLocationRelativeTo(null);
-		frame.setResizable(false);
+//		frame.setResizable(false);
 		frame.setTitle("Zero Waste");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		

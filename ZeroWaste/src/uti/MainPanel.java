@@ -12,6 +12,16 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+/** 
+ * 
+ * @author yoanaangelova
+ * TODO: 
+ * 		Цвети: checkBox-ове, взимане на инфо от файл и прехвърляне в arrayList; разбъркване; извеждане само по 7 (отделен метод с цикъл)
+ * 		Йони: да довърша бутона Give me more
+ * 		Роси: грешка
+ *
+ */
+
 public class MainPanel extends JPanel implements ActionListener {
 
 // here we have the tasks as a check box list
@@ -28,14 +38,15 @@ public class MainPanel extends JPanel implements ActionListener {
 	/** 
 	 * TODO: calculating the result from the test 
 	*/
-	int result = 23;
+	int result;
 	int click = 0;
 
-	public MainPanel(JFrame frame) {
+	public MainPanel(JFrame frame, int result, User user) {
+		this.result = result;
 		this.frame = frame;
 		this.frame.setSize(850, 400);
 		this.frame.setLocationRelativeTo(null);
-		this.frame.setResizable(false);
+//		this.frame.setResizable(false);
 
 		mainPanel.add(toDoPanel);
 		mainPanel.add(donePanel);
