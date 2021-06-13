@@ -28,9 +28,8 @@ import javax.swing.UIManager;
 
 /**
  * 
- * @author yoanaangelova
- * TODO: 
- * 		Роси: да се оправи изчиснявнето на резултата и  JOptionPane-а (размер, текст и бутон)
+ * @author yoanaangelova TODO: Роси: да се оправи изчиснявнето на резултата и
+ *          JOptionPane-а (размер, текст и бутон)
  *
  */
 
@@ -43,14 +42,12 @@ public class TestPanel extends JPanel implements ActionListener {
 	File testFile;
 	Scanner scanner;
 	JLabel[] testLabel;
-	
+
 	User user;
 
 	Map<String, Integer> answers; // String - key(answer); integer - value(points)
 
 	public TestPanel(JFrame frame) throws IOException {
-		this.user = user;
-		
 		this.frame = frame;
 		this.frame.setSize(850, 400);
 		this.frame.setLocationRelativeTo(null);
@@ -59,8 +56,9 @@ public class TestPanel extends JPanel implements ActionListener {
 		testPanel.setBorder(BorderFactory.createEmptyBorder());
 		testPanel.setLayout(new BoxLayout(testPanel, BoxLayout.Y_AXIS));
 		this.add(testPanel);
-		
-		JScrollPane scr = new JScrollPane(testPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+		JScrollPane scr = new JScrollPane(testPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scr.setPreferredSize(new Dimension(850, 400));
 		add(scr);
 
@@ -76,7 +74,7 @@ public class TestPanel extends JPanel implements ActionListener {
 		getAnswers(answers);// finds the answers
 		groupAnswers(answers);// puts the answers in groups of three
 		printTest(Questions, answers);// puts questions in labels
-		
+
 		resultButton = new JButton("Results"); // shows the results after the test is completed
 		resultButton.addActionListener(this);
 
@@ -92,7 +90,6 @@ public class TestPanel extends JPanel implements ActionListener {
 		String line = "";
 		while (scanner.hasNextLine()) {
 			line = scanner.nextLine();
-//			line = String.format("<html><div style=\"width:%dpx;\">%s</div></html>", 850, line);
 			if (line.startsWith("Question:")) {
 				Questions.add(line);
 			}
@@ -100,7 +97,7 @@ public class TestPanel extends JPanel implements ActionListener {
 
 		System.out.println("Questions: " + Questions.size());
 	}
-	
+
 	String currentLine;
 
 	public Map<String, Integer> getAnswers(Map<String, Integer> answerMap) throws FileNotFoundException {
@@ -150,20 +147,20 @@ public class TestPanel extends JPanel implements ActionListener {
 	}
 
 	JRadioButton[] radioButtons = new JRadioButton[30];
-	
+
 	public void printTest(ArrayList<String> questions, Map<String, Integer> answerMap) {
 		ArrayList<String> answersList = new ArrayList<String>(answerMap.keySet());
 		for (int j = 0; j < 30; j++) {
 			radioButtons[j] = new JRadioButton();
 			String answerText = answersList.get(j);
-			answerText = String.format("<html><div style=\"width:%dpx;\">%s</div></html>", 600, answerText);
+			answerText = String.format("<html>%s</html>", answerText);
 			radioButtons[j].setText(answerText);
 		}
 		for (int i = 1; i <= 10; i++) {
 			testLabel[i - 1] = new JLabel();
 			String questionText = questions.get(i - 1);
 			questionText = String.format("<html><div style=\"width:%dpx;\">%s</div></html>", 600, questionText);
-			testLabel[i - 1].setText(questionText.toString());
+			testLabel[i - 1].setText(questionText);
 			testPanel.add(testLabel[i - 1]);
 			int index = (3 * i) - 1;
 			testPanel.add(radioButtons[index]);
@@ -176,29 +173,35 @@ public class TestPanel extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		int result = calculateResult(radioButtons, answers);
+		
 		UIManager.put("OptionPane.DEFAULT_OPTION", "Let's go");
-		int n = JOptionPane.showConfirmDialog(null, 
-                user.print(), "Your result", JOptionPane.DEFAULT_OPTION);
-		if (n == JOptionPane.DEFAULT_OPTION) {
-			this.setVisible(false);
-			MainPanel main = new MainPanel(this.frame, result, this.user);
-		}
+		String message = user.print();
+		message = String.format("<html><div style=\"width:%dpx;\">%s</div></html>", 300, message);
+		int n = JOptionPane.showConfirmDialog(null, message, "Your result", JOptionPane.DEFAULT_OPTION);
+		
+		this.setVisible(false);
+		MainPanel main = new MainPanel(this.frame, this.user);
 	}
-	
+
 	public int calculateResult(JRadioButton[] radioButtons, Map<String, Integer> answerMap) {
 		int result = 0;
 		for (int j = 0; j < 30; j++) {
 			if (radioButtons[j].isSelected()) {
-				String t = radioButtons[j].getText();
-				if(answerMap.containsKey(t)) {
+				String t = radioButtons[j].getText().replace("<html>", "").replace("</html>", "");
+				if (answerMap.containsKey(t)) {
 					result += answerMap.get(t);
-				}
-				else {
-					System.out.println("No");
-				}
-				
+				} 
 			}
 		}
+
+		if (0 < result && result < 11) {
+			user = new Newbie(result);
+		} else if (10 < result && result < 21) {
+			user = new Experienced(result);
+		} else {
+			user = new Master(result);
+		}
+
 		return result;
 	}
 

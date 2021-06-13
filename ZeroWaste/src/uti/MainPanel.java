@@ -1,125 +1,164 @@
 package uti;
 
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
+import javax.swing.Action;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
-/** 
+/**
  * 
- * @author yoanaangelova
- * TODO: 
- * 		Цвети: checkBox-ове, взимане на инфо от файл и прехвърляне в arrayList; разбъркване; извеждане само по 7 (отделен метод с цикъл)
- * 		Йони: да довърша бутона Give me more
- * 		Роси: грешка
- *
+ * @author yoanaangelova TODO: Цвети: checkBox-ове, взимане на инфо от файл и
+ *         прехвърляне в arrayList; разбъркване; извеждане само по 7 (отделен
+ *         метод с цикъл) Йони: да довърша бутона Give me more Роси: грешка
  */
 
 public class MainPanel extends JPanel implements ActionListener {
 
-// here we have the tasks as a check box list
-// on the right side will be the completed tasks
+	// here we have the tasks as a check box list
+	// on the right side will be the completed tasks
 	JFrame frame;
-	
-	JPanel mainPanel =  new JPanel();
-	JPanel toDoPanel = new JPanel();// left panel keeps the to-do tasks
-	JPanel donePanel = new JPanel();// left panel keeps the completed tasks
-	
+
+	JPanel mainPanel = new JPanel();
+	JPanel tasksPanel = new JPanel();
+	JPanel buttonPanel = new JPanel();
+	// left panel keeps the to-do tasks
+	JPanel toDoPanel = new JPanel();
+	// right panel keeps the completed tasks
+	JPanel donePanel = new JPanel();
+	JTextArea doneTasks = new JTextArea();
+
 	JButton newTasks = new JButton("Give me more!");
-	
+
 	User user;
-	/** 
-	 * TODO: calculating the result from the test 
-	*/
-	int result;
+
 	int click = 0;
 
-	public MainPanel(JFrame frame, int result, User user) {
-		this.result = result;
+	public MainPanel(JFrame frame, User user) {
+		this.user = user;
+
 		this.frame = frame;
 		this.frame.setSize(850, 400);
 		this.frame.setLocationRelativeTo(null);
 //		this.frame.setResizable(false);
 
-		mainPanel.add(toDoPanel);
-		mainPanel.add(donePanel);
-		toDoPanel.setLayout(new BoxLayout(toDoPanel, BoxLayout.X_AXIS));
-	
+		this.frame.add(mainPanel);
+
+		mainPanel.add(tasksPanel);
+		mainPanel.add(buttonPanel);
+		mainPanel.setLayout(new GridLayout(2, 1));
+
+		tasksPanel.add(toDoPanel);
+		tasksPanel.add(donePanel);
+		tasksPanel.setLayout(new GridLayout(1, 2));
+
+		buttonPanel.add(newTasks);
+		newTasks.addActionListener(this);
+
 		toDoPanel.setBorder(BorderFactory.createEmptyBorder());
-		toDoPanel.setLayout(new BoxLayout(toDoPanel, BoxLayout.Y_AXIS));
+		toDoPanel.setAlignmentX(LEFT_ALIGNMENT);
+		toDoPanel.setLayout(new GridLayout(7, 1));
+
 		donePanel.setBorder(BorderFactory.createEmptyBorder());
-		donePanel.setLayout(new BoxLayout(donePanel, BoxLayout.Y_AXIS));
-		
+		donePanel.setAlignmentX(LEFT_ALIGNMENT);
+		donePanel.setLayout(new GridLayout(7, 1));
+
 		getNewTasks();
-		mainPanel.add(newTasks);
-		
+
 		this.setVisible(true);
 
 	}
-	
-	ArrayList<JCheckBox> listWithTasks = new ArrayList<>();
-	//ArrayList<String> tasks = new ArrayList<>();
-	
+
+	ArrayList<String> tasks = new ArrayList<>();
+	Scanner getTasks;
+
+	ArrayList<String> list = new ArrayList<String>();
+
+	public void fillTaskLists() throws FileNotFoundException {
+		getTasks = new Scanner(MainPanel.class.getResourceAsStream("tasks/" + user.userName + ".txt"));
+
+		while (getTasks.hasNext()) {
+			tasks.add(getTasks.nextLine());
+		}
+		Collections.shuffle(tasks);
+		getTasks.close();
+	}
+
+	ArrayList<JCheckBox> checkBoxes = new ArrayList<>();
+	ArrayList<String> dones = new ArrayList<String>();
+
+	public void createCheckBoxes() {
+		for (int i = 0; i < 7; i++) {
+			String text = tasks.get(i);
+			text = String.format("<html>%s</html>", text);
+			JCheckBox option = new JCheckBox(text);
+			toDoPanel.add(option);
+			checkBoxes.add(option);
+			option.setOpaque(true);
+			dones.add(tasks.get(i));
+
+			option.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					JCheckBox option = (JCheckBox)e.getSource();
+					if (option.isSelected()) {
+						toDoPanel.remove(option);
+						donePanel.add(option);
+						toDoPanel.updateUI();
+						option.setEnabled(false);
+					}
+
+				}
+			});
+
+		}
+		tasks.removeAll(dones);
+	}
+
 	public void getNewTasks() {
 		// the donePanel must be cleaned before giving new tasks
-		while(!(listWithTasks.isEmpty())) {
-			donePanel.remove(listWithTasks.get(0));
-			listWithTasks.remove(0);
+		while (!(checkBoxes.isEmpty())) {
+			donePanel.remove(checkBoxes.get(0));
+			checkBoxes.remove(0);
 		}
-		
-		if (result > 0 && result < 11) {
-			user = new Newbie(result);
-			generateNewTask(user);
-		}
-		else if (result > 10 && result < 21) {
-			user = new Experienced(result);
-			generateNewTask(user);
-		}
-		else {
-			user = new Master(result);
-			generateNewTask(user);
+
+		try {
+			fillTaskLists();
+			createCheckBoxes();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		click++;
-		if (click == user.buttonCount) {
-			/**
-			 * TODO: JOptionPane: "You are the boss of ZeroWaste!"
-			 */
+		if (click >= user.buttonCount) {
+			JOptionPane.showMessageDialog(this, "You are the boss of ZeroWaste! You have no more tasks to do!");
+		} else {
+			try {
+				getNewTasks();
+				donePanel.updateUI();
+				toDoPanel.updateUI();
+			}
+			catch(Exception e){
+				System.out.println(e);
+			}
 		}
-		else {
-			/**
-			 *  TODO: when clicked the current data must me erased and the next 7 tasks must me shown
-			 */
-//			try (/* if all the checkBoxes are clicked: */) {
-//				getNetTasks();
-//			}
-//			catch {
-//				// if not all the checkBoxes are clicked:
-//				// => exception (custom)
-//			}
-		}
-			 
-	}
-	
-	public void generateNewTask(User user) {
-		Scanner sc = new Scanner(ZeroWasteApp.class.getResourceAsStream("tasks/" + user.userName + ".txt")); 
-		
-		while (sc.hasNext()) {
-			JCheckBox option = new JCheckBox(sc.nextLine());
-			option.setOpaque(true);
-			listWithTasks.add(option);
-			toDoPanel.add(option);
-		}
+
 	}
 
 }
