@@ -37,7 +37,7 @@ public class TestPanel extends JPanel implements ActionListener {
 	JFrame frame;
 
 	JPanel testPanel;
-	JScrollPane scrollPane;
+	JScrollPane scr;
 	JButton resultButton;
 	File testFile;
 	Scanner scanner;
@@ -57,7 +57,7 @@ public class TestPanel extends JPanel implements ActionListener {
 		testPanel.setLayout(new BoxLayout(testPanel, BoxLayout.Y_AXIS));
 		this.add(testPanel);
 
-		JScrollPane scr = new JScrollPane(testPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+		scr = new JScrollPane(testPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scr.setPreferredSize(new Dimension(850, 400));
 		add(scr);
@@ -94,8 +94,6 @@ public class TestPanel extends JPanel implements ActionListener {
 				Questions.add(line);
 			}
 		}
-
-		System.out.println("Questions: " + Questions.size());
 	}
 
 	String currentLine;
@@ -115,7 +113,6 @@ public class TestPanel extends JPanel implements ActionListener {
 				answerMap.put(nextLine.substring(2), 3);
 			}
 		}
-		System.out.println("answerMap: " + answerMap.size());
 		return answerMap;
 	}
 
@@ -125,7 +122,6 @@ public class TestPanel extends JPanel implements ActionListener {
 	public ButtonGroup[] groupAnswers(Map<String, Integer> answerMap) {
 		// converting the Map to an array
 		ArrayList<String> answersList = new ArrayList<String>(answerMap.keySet());
-		System.out.print(answerMap.keySet().size());
 		// creating an array of 30 radio buttons
 		JRadioButton[] rButton = new JRadioButton[30];
 		// setting the name of each button
@@ -194,9 +190,9 @@ public class TestPanel extends JPanel implements ActionListener {
 			}
 		}
 
-		if (0 < result && result < 11) {
+		if (9 < result && result < 17) {
 			user = new Newbie(result);
-		} else if (10 < result && result < 21) {
+		} else if (16 < result && result < 25) {
 			user = new Experienced(result);
 		} else {
 			user = new Master(result);

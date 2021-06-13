@@ -84,7 +84,6 @@ public class ZeroWasteWelcomePage extends JPanel implements ActionListener{
 		try {
 			TestPanel test = new TestPanel(this.frame);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
