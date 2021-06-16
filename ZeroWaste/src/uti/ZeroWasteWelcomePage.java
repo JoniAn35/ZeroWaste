@@ -15,7 +15,17 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-public class ZeroWasteWelcomePage extends JPanel implements ActionListener{
+public class ZeroWasteWelcomePage extends JPanel implements ActionListener{	
+	/**
+	 * we have: 
+	 * 	-> one frame that contains the main panel
+	 * 		-> the main panel that contains 2 subpanels
+	 * 			-> the top panel contains:
+	 * 				-> text panel - with the title and the text with the clarification for the project
+	 * 				-> button panel  contains the button
+	 * 			-> the bottom panel contains the picture
+	 */
+	
 	JFrame frame;
 	
 	JPanel mainPanel;
@@ -32,9 +42,9 @@ public class ZeroWasteWelcomePage extends JPanel implements ActionListener{
 
 	public ZeroWasteWelcomePage(JFrame frame) throws IOException {
 		this.frame = frame;
-		this.frame.setSize(850, 400);
+		this.frame.setSize(850, 450);
 		this.frame.setLocationRelativeTo(null);
-//		this.frame.setResizable(false);
+		this.frame.setResizable(false);
 		
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new GridLayout(2, 1));
@@ -82,6 +92,7 @@ public class ZeroWasteWelcomePage extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent arg0) {
 		this.setVisible(false);
 		try {
+			// when the button is pressed this panel will be disabled and the test panel will be shown
 			TestPanel test = new TestPanel(this.frame);
 		} catch (IOException e) {
 			e.printStackTrace();
